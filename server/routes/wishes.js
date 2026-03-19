@@ -49,11 +49,19 @@ router.put('/wishes/:id', async (req, res) => {
 router.put('/wishes/:id/reserve', async (req, res) => {
   try {
     const { name } = req.body;
+    if (!name || !name.trim()) return res.status(400).json({ error: 'Name is required' });
+
+    // Only reserve if not already reserved (atomic check)
     const { rows } = await pool.query(
-      'UPDATE wishes SET reserved_by=$1 WHERE id=$2 RETURNING *',
-      [name, req.params.id]
+      'UPDATE wishes SET reserved_by=$1 WHERE id=$2 AND reserved_by IS NULL RETURNING *',
+      [name.trim(), req.params.id]
     );
-    if (!rows.length) return res.status(404).json({ error: 'Wish not found' });
+    if (!rows.length) {
+      // Check if wish exists at all
+      const check = await pool.query('SELECT reserved_by FROM wishes WHERE id=$1', [req.params.id]);
+      if (!check.rows.length) return res.status(404).json({ error: 'Wish not found' });
+      return res.status(409).json({ error: 'Already reserved', reserved_by: check.rows[0].reserved_by });
+    }
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
