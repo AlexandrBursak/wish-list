@@ -7,7 +7,7 @@ const router = Router();
 router.get('/events/:eventId/wishes', async (req, res) => {
   try {
     const { rows } = await pool.query(
-      'SELECT * FROM wishes WHERE event_id = $1 ORDER BY created_at DESC',
+      'SELECT * FROM wishes WHERE event_id = $1 ORDER BY (reserved_by IS NOT NULL), created_at DESC',
       [req.params.eventId]
     );
     res.json(rows);
