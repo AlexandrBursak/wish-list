@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 const { migrate } = require('./db');
 const eventsRouter = require('./routes/events');
 const wishesRouter = require('./routes/wishes');
+const ogRouter = require('./routes/og');
 const swaggerSpec = require('./swagger');
 
 const app = express();
@@ -21,6 +22,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // API routes
 app.use('/api/events', eventsRouter);
 app.use('/api', wishesRouter);
+app.use('/api/og', ogRouter);
 
 // Serve React build in production
 const clientDist = path.join(__dirname, '..', 'client', 'dist');

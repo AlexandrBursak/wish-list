@@ -14,6 +14,13 @@ export default function WishItem({ wish, onReserve, onUnreserve, onDelete }) {
 
   return (
     <div className={`wish-item ${wish.reserved_by ? 'reserved' : ''}`}>
+      {wish.image_url && (
+        <img
+          src={wish.image_url}
+          alt=""
+          className="wish-thumb"
+        />
+      )}
       <div className="wish-info">
         <h4>
           {wish.reserved_by ? '✅ ' : ''}{wish.title}
