@@ -32,7 +32,7 @@ docker run -d --name wishlist-db \
   -e POSTGRES_USER=wishlist \
   -e POSTGRES_PASSWORD=wishlist \
   -p 5432:5432 \
-  postgres:16-alpine
+  postgres:18-alpine
 ```
 
 ### Встановлення залежностей
