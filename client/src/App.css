@@ -60,14 +60,13 @@ body {
   border-radius: var(--radius);
   padding: 20px;
   cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
   border: 1px solid var(--border);
   position: relative;
+  transition: border-color 0.2s;
 }
 
 .event-card:hover {
-  transform: translateY(-2px);
-  background: var(--bg-card-hover);
+  border-color: var(--accent);
 }
 
 .event-card .emoji {
@@ -153,6 +152,15 @@ body {
 
 .wish-item:hover {
   background: var(--bg-card-hover);
+}
+
+.wish-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
 }
 
 .wish-item.reserved {

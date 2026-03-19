@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
 import WishForm from '../components/WishForm';
 import WishItem from '../components/WishItem';
+
+const POLL_INTERVAL = 5000; // 5 sec
 
 export default function WishesPage() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [wishes, setWishes] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const pollRef = useRef(null);
 
   const loadEvent = () => api.get(`/events/${id}`).then(r => setEvent(r.data));
   const loadWishes = () => api.get(`/events/${id}/wishes`).then(r => setWishes(r.data));
@@ -16,6 +19,10 @@ export default function WishesPage() {
   useEffect(() => {
     loadEvent();
     loadWishes();
+
+    // Auto-refresh
+    pollRef.current = setInterval(loadWishes, POLL_INTERVAL);
+    return () => clearInterval(pollRef.current);
   }, [id]);
 
   const handleAdd = async (data) => {
@@ -25,7 +32,13 @@ export default function WishesPage() {
   };
 
   const handleReserve = async (wishId, name) => {
-    await api.put(`/wishes/${wishId}/reserve`, { name });
+    try {
+      await api.put(`/wishes/${wishId}/reserve`, { name });
+    } catch (err) {
+      if (err.response?.status === 409) {
+        alert(`Це побажання вже зарезервовано: ${err.response.data.reserved_by}`);
+      }
+    }
     loadWishes();
   };
 
@@ -46,7 +59,7 @@ export default function WishesPage() {
     <>
       <div className="wishes-header">
         <div>
-          <Link to="/" className="back-btn">← Назад</Link>
+          <Link to="/" className="back-btn">&larr; Назад</Link>
         </div>
         <h2>{event.emoji} {event.title}</h2>
         <button className="btn btn-primary" onClick={() => setShowForm(true)}>
@@ -58,7 +71,7 @@ export default function WishesPage() {
 
       {wishes.length === 0 ? (
         <div className="empty">
-          <div className="empty-icon">✨</div>
+          <div className="empty-icon">&#10024;</div>
           <p>Список побажань порожній. Додайте перше!</p>
         </div>
       ) : (
