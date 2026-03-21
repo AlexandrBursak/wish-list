@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import EventsPage from './pages/EventsPage';
 import WishesPage from './pages/WishesPage';
+import ThemeToggle from './components/ThemeToggle';
 import './App.css';
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       <div className="app">
         <header className="app-header">
           <a href="/">WishList</a>
+          <ThemeToggle />
         </header>
         <main>
           <Routes>
