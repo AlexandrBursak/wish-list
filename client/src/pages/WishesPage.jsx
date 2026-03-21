@@ -57,11 +57,9 @@ export default function WishesPage() {
 
   return (
     <>
+      <h2 className="wishes-title">{event.emoji} {event.title}</h2>
       <div className="wishes-header">
-        <div>
-          <Link to="/" className="back-btn">&larr; Назад</Link>
-        </div>
-        <h2>{event.emoji} {event.title}</h2>
+        <Link to="/" className="back-btn">&larr; Назад</Link>
         <button className="btn btn-primary" onClick={() => setShowForm(true)}>
           + Додати побажання
         </button>

@@ -107,16 +107,17 @@ body {
 }
 
 /* Wishes */
+.wishes-title {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
 .wishes-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
   gap: 12px;
-}
-
-.wishes-header h2 {
-  font-size: 24px;
 }
 
 .back-btn {
@@ -360,12 +361,23 @@ body {
 
 @media (max-width: 480px) {
   .wish-item {
-    flex-direction: column;
-    align-items: flex-start;
+    display: block;
+  }
+
+  .wish-thumb {
+    float: left;
+    margin: 0 12px 8px 0;
+  }
+
+  .wish-info {
+    overflow: hidden;
   }
 
   .wish-actions {
+    clear: both;
+    display: flex;
     width: 100%;
+    padding-top: 8px;
   }
 
   .wish-actions .btn {
